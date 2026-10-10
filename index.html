@@ -178,11 +178,16 @@
                     </div>
                 </div>
 
-                <!-- Input Reason -->
-                <div class="mb-4">
-                    <label class="form-label small fw-semibold text-secondary">Reason / Alasan <span class="text-danger">*</span></label>
-                    <input type="text" id="reasonVal" class="form-control" required placeholder="Contoh: Kemasan Pecah / Bocor">
-                </div>
+                <!-- Input Reason (Dropdown Baru) -->
+<div class="mb-4">
+    <label class="form-label small fw-semibold text-secondary">Reason / Alasan <span class="text-danger">*</span></label>
+    <select id="reasonVal" class="form-select" required>
+        <option value="" selected disabled>Pilih Reason...</option>
+        <option value="Handling Muat">Handling Muat</option>
+        <option value="Barang Rubuh">Barang Rubuh</option>
+        <option value="Kemasan rusak dari produksi">Kemasan rusak dari produksi</option>
+    </select>
+</div>
 
                 <div id="formAlert" class="alert py-2 small text-center d-none mb-3"></div>
                 <button type="submit" id="submitBtn" class="btn btn-custom w-100 shadow-sm"> SIMPAN DATA </button>
