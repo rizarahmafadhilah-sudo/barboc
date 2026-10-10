@@ -153,7 +153,7 @@
                 <!-- Input MID -->
                 <div class="mb-3">
                     <label class="form-label small fw-semibold text-secondary">MID <span class="text-danger">*</span></label>
-                    <input type="text" id="midVal" class="form-control" required placeholder="Contoh: MID123456">
+                    <input type="text" id="midVal" class="form-control" required placeholder="Contoh: MID123456" onchange="fetchMidDetail()">
                 </div>
 
                 <!-- Input Deskripsi -->
@@ -178,16 +178,16 @@
                     </div>
                 </div>
 
-                <!-- Input Reason (Dropdown Baru) -->
-<div class="mb-4">
-    <label class="form-label small fw-semibold text-secondary">Reason / Alasan <span class="text-danger">*</span></label>
-    <select id="reasonVal" class="form-select" required>
-        <option value="" selected disabled>Pilih Reason...</option>
-        <option value="Handling Muat">Handling Muat</option>
-        <option value="Barang Rubuh">Barang Rubuh</option>
-        <option value="Kemasan rusak dari produksi">Kemasan rusak dari produksi</option>
-    </select>
-</div>
+                <!-- Input Reason (Dropdown) -->
+                <div class="mb-4">
+                    <label class="form-label small fw-semibold text-secondary">Reason / Alasan <span class="text-danger">*</span></label>
+                    <select id="reasonVal" class="form-select" required>
+                        <option value="" selected disabled>Pilih Reason...</option>
+                        <option value="Handling Muat">Handling Muat</option>
+                        <option value="Barang Rubuh">Barang Rubuh</option>
+                        <option value="Kemasan rusak dari produksi">Kemasan rusak dari produksi</option>
+                    </select>
+                </div>
 
                 <div id="formAlert" class="alert py-2 small text-center d-none mb-3"></div>
                 <button type="submit" id="submitBtn" class="btn btn-custom w-100 shadow-sm"> SIMPAN DATA </button>
@@ -254,6 +254,30 @@
             }
         }
 
+        async function fetchMidDetail() {
+            const midVal = document.getElementById('midVal').value.trim();
+            const deskripsiInput = document.getElementById('deskripsiVal');
+
+            if (!midVal) return;
+
+            deskripsiInput.value = "Mencari deskripsi...";
+
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getMidDetail&mid=${encodeURIComponent(midVal)}`);
+                const data = await response.json();
+
+                if (data.deskripsi) {
+                    deskripsiInput.value = data.deskripsi;
+                } else {
+                    deskripsiInput.value = "";
+                    deskripsiInput.placeholder = "Deskripsi tidak ditemukan, silakan isi manual";
+                }
+            } catch (err) {
+                console.error(err);
+                deskripsiInput.value = "";
+            }
+        }
+
         function backToLogin() {
             document.getElementById('formSection').classList.add('d-none');
             document.getElementById('loginSection').classList.remove('d-none');
@@ -303,7 +327,7 @@
                 deskripsi: document.getElementById('deskripsiVal').value.trim(),
                 qty: document.getElementById('qtyVal').value,
                 uom: document.getElementById('uomVal').value,
-                reason: document.getElementById('reasonVal').value.trim(),
+                reason: document.getElementById('reasonVal').value,
                 pic: currentNama + " (" + currentNik + ")"
             };
 
