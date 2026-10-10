@@ -386,17 +386,18 @@
             alertBox.classList.add('d-none');
 
             const payload = {
-                type: selectedType,
-                tanggal: document.getElementById('tanggalVal').value,
-                noPallet: document.getElementById('noPalletVal').value.trim(),
-                mid: document.getElementById('midVal').value.trim(),
-                deskripsi: document.getElementById('deskripsiVal').value.trim(),
-                qty: document.getElementById('qtyVal').value,
-                uom: document.getElementById('uomVal').value,
-                reason: document.getElementById('reasonVal').value,
-                pic: currentNama + " (" + currentNik + ")"
-            };
-
+    type: selectedType,
+    tanggal: document.getElementById('tanggalVal').value,
+    noPallet: document.getElementById('noPalletVal').value.trim(),
+    mid: document.getElementById('midVal').value.trim(),
+    deskripsi: document.getElementById('deskripsiVal').value.trim(),
+    qty: document.getElementById('qtyVal').value,
+    uom: document.getElementById('uomVal').value,
+    reason: document.getElementById('reasonVal').value,
+    nik: currentNik, // Tambahkan baris ini agar NIK terkirim
+    pic: currentNama + " (" + currentNik + ")"
+};
+        
             try {
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
