@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset PDA</title>
+    
+    <!-- Konfigurasi agar bisa jadi Logo Aplikasi di HP -->
+    <meta name="theme-color" content="#1B365D">
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpjjQ0KG8XLk69cJr3Es786wKiB3ug-v46kmbatp05O_-Lop7co52YEUvS&s=10">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpjjQ0KG8XLk69cJr3Es786wKiB3ug-v46kmbatp05O_-Lop7co52YEUvS&s=10">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(30, 58, 138, 0.3) 0%, transparent 40%),
+                linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 2px, transparent 0, transparent 50px);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif; 
+            color: #334155; 
+            min-height: 100vh;
+        }
+        .card-box { 
+            background: #ffffff; 
+            border: none; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.3); 
+        }
+        .btn-custom { 
+            background-color: #1B365D; 
+            border-color: #1B365D; 
+            color: #ffffff; 
+            font-weight: 600; 
+            padding: 12px; 
+            border-radius: 12px; 
+            transition: all 0.3s;
+        }
+        .btn-custom:hover { 
+            background-color: #11223F; 
+            color: #ffffff; 
+            transform: translateY(-1px);
+        }
+        .form-control { 
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            border: 1px solid #cbd5e1; 
+            font-size: 0.95rem; 
+        }
+        .form-control:focus {
+            border-color: #1B365D;
+            box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.15);
+        }
+        .option-btn { 
+            border: 1px solid #cbd5e1; 
+            background-color: #ffffff; 
+            color: #334155; 
+            font-weight: 600; 
+            padding: 10px; 
+            border-radius: 12px; 
+            transition: all 0.2s ease; 
+        }
+        .option-btn.active { 
+            background-color: #1B365D; 
+            border-color: #1B365D; 
+            color: #ffffff; 
+        }
+        .company-logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #f8fafc;
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            color: #94a3b8 !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100 justify-content-between p-3 p-md-5">
+    <div class="container my-auto" style="max-width: 480px;">
+        
+        <!-- HALAMAN 1: LOGIN NIK -->
+        <div id="loginSection" class="card-box p-4 p-md-5">
+            <div class="text-center mb-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpjjQ0KG8XLk69cJr3Es786wKiB3ug-v46kmbatp05O_-Lop7co52YEUvS&s=10" alt="Logo PT" class="company-logo mb-3">
+                <h3 class="fw-bold text-dark">Asset PDA Warehouse 1 FG</h3>
+                <p class="text-muted small">Silakan masukkan NIK Anda untuk melanjutkan</p>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small fw-semibold text-secondary">NIK Karyawan <span class="text-danger">*</span></label>
+                <input type="text" id="loginNik" class="form-control" placeholder="Contoh: 214006291" onkeypress="if(event.key === 'Enter') handleLogin();">
+            </div>
+            <div id="loginAlert" class="alert py-2 small text-center d-none mb-3"></div>
+            <button type="button" onclick="handleLogin()" class="btn btn-custom w-100 shadow-sm" id="loginBtn"> MASUK </button>
+        </div>
+
+        <!-- HALAMAN 2: FORM UTAMA TRANSAKSI -->
+        <div id="formSection" class="card-box p-4 p-md-5 d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="backToLogin()">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Ganti NIK
+                </button>
+                <span id="displayNik" class="badge bg-light text-dark border px-3 py-2 small"></span>
+            </div>
+            
+            <div class="text-center mb-4">
+                <h4 class="fw-bold text-dark mb-1">Form Asset PDA</h4>
+                <p id="welcomeUserText" class="text-primary fw-semibold small mb-1">Halo, -</p>
+                <p class="text-muted small mb-0">Peminjaman & Pengembalian</p>
+            </div>
+
+            <form id="transactionForm" onsubmit="submitTransaction(event)">
+                <!-- Status Transaksi -->
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold text-secondary d-block">Status Transaksi <span class="text-danger">*</span></label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button type="button" class="btn option-btn w-100 active" id="btnPinjam" onclick="selectStatus('PINJAM')">Ambil</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn option-btn w-100" id="btnKembali" onclick="selectStatus('KEMBALI')">Kembali</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manpower Group -->
+                <div class="mb-3" id="groupManpowerWrapper">
+                    <label class="form-label small fw-semibold text-secondary d-block">Manpower Group <span class="text-danger">*</span></label>
+                    <div class="row g-2">
+                        <div class="col-6"><button type="button" class="btn option-btn w-100" id="btnGroupA" onclick="selectGroup('Group A')">Group A</button></div>
+                        <div class="col-6"><button type="button" class="btn option-btn w-100" id="btnGroupB" onclick="selectGroup('Group B')">Group B</button></div>
+                        <div class="col-6"><button type="button" class="btn option-btn w-100" id="btnGroupC" onclick="selectGroup('Group C')">Group C</button></div>
+                        <div class="col-6"><button type="button" class="btn option-btn w-100" id="btnNonShift" onclick="selectGroup('Non Shift')">Non Shift</button></div>
+                        <div class="col-6"><button type="button" class="btn option-btn w-100" id="btnDeptLain" onclick="selectGroup('Dept Lain')">Dept Lain</button></div>
+                    </div>
+                </div>
+
+                <!-- Input Asset -->
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold text-secondary" id="labelTablet">No. Tablet / PDA <span class="text-danger">*</span></label>
+                    <input type="text" id="tabletVal" class="form-control" required placeholder="Contoh: T01 / S01">
+                </div>
+                <div class="mb-3" id="rfidWrapper">
+                    <label class="form-label small fw-semibold text-secondary">RFID Gun</label>
+                    <input type="text" id="rfidVal" class="form-control" placeholder="Contoh: T01">
+                </div>
+                <div class="mb-4" id="spiderWrapper">
+                    <label class="form-label small fw-semibold text-secondary">Spider Scanner</label>
+                    <input type="text" id="spiderVal" class="form-control" placeholder="Contoh: S01">
+                </div>
+
+                <div id="formAlert" class="alert py-2 small text-center d-none mb-3"></div>
+                <button type="submit" id="submitBtn" class="btn btn-custom w-100 shadow-sm"> SUBMIT </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="text-center small mt-4">
+        &copy; 2026 by Non FG Support
+    </footer>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4SDziwJNwZjW9038YcEwGZ-klnIpOO6C7ZBEdIWd59HQCCk2zPchd3rijAqkEkWCPHA/exec"; 
+        let currentNik = "";
+        let currentNama = "";
+        let selectedStatus = "PINJAM"; 
+        let selectedGroup = ""; 
+
+        async function handleLogin() {
+            const nikInput = document.getElementById('loginNik').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!nikInput) {
+                alertBox.className = "alert alert-danger py-2 small text-center mb-3";
+                alertBox.innerText = "Silakan masukkan NIK terlebih dahulu!";
+                alertBox.classList.remove('d-none');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.innerText = "Memeriksa NIK...";
+            alertBox.classList.add('d-none');
+
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getNama&nik=${nikInput}`);
+                const data = await response.json();
+                
+                currentNik = nikInput;
+                currentNama = data.nama || "Karyawan";
+
+                document.getElementById('displayNik').innerText = "NIK: " + currentNik;
+                document.getElementById('welcomeUserText').innerText = "Halo, " + currentNama;
+
+                document.getElementById('loginSection').classList.add('d-none');
+                document.getElementById('formSection').classList.remove('d-none');
+                updateFormLayout();
+            } catch (err) {
+                console.error(err);
+                currentNik = nikInput;
+                currentNama = "Karyawan " + currentNik;
+                document.getElementById('displayNik').innerText = "NIK: " + currentNik;
+                document.getElementById('welcomeUserText').innerText = "Halo, " + currentNama;
+
+                document.getElementById('loginSection').classList.add('d-none');
+                document.getElementById('formSection').classList.remove('d-none');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerText = "MASUK";
+            }
+        }
+
+        function backToLogin() {
+            document.getElementById('formSection').classList.add('d-none');
+            document.getElementById('loginSection').classList.remove('d-none');
+            document.getElementById('loginNik').value = "";
+            document.getElementById('loginAlert').classList.add('d-none');
+            document.getElementById('formAlert').classList.add('d-none');
+            document.getElementById('tabletVal').value = "";
+            document.getElementById('rfidVal').value = "";
+            document.getElementById('spiderVal').value = "";
+        }
+
+        async function selectStatus(status) {
+            selectedStatus = status;
+            document.getElementById('btnPinjam').classList.remove('active');
+            document.getElementById('btnKembali').classList.remove('active');
+            
+            const tabletInput = document.getElementById('tabletVal');
+            const rfidInput = document.getElementById('rfidVal');
+            const spiderInput = document.getElementById('spiderVal');
+
+            if (status === 'PINJAM') {
+                document.getElementById('btnPinjam').classList.add('active');
+                tabletInput.value = "";
+                rfidInput.value = "";
+                spiderInput.value = "";
+            } else {
+                document.getElementById('btnKembali').classList.add('active');
+                
+                tabletInput.value = "Memuat asset...";
+                rfidInput.value = "Memuat...";
+                spiderInput.value = "Memuat...";
+
+                try {
+                    const response = await fetch(`${WEB_APP_URL}?action=getAssetAktif&nik=${currentNik}`);
+                    const data = await response.json();
+                    
+                    tabletInput.value = data.tablet || "";
+                    rfidInput.value = data.rfid || "";
+                    spiderInput.value = data.spider || "";
+                } catch (e) {
+                    console.error(e);
+                    tabletInput.value = "";
+                    rfidInput.value = "";
+                    spiderInput.value = "";
+                }
+            }
+            updateFormLayout();
+        }
+
+        function selectGroup(groupName) {
+            selectedGroup = groupName;
+            ['btnGroupA', 'btnGroupB', 'btnGroupC', 'btnNonShift', 'btnDeptLain'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            if (groupName === 'Group A') document.getElementById('btnGroupA').classList.add('active');
+            else if (groupName === 'Group B') document.getElementById('btnGroupB').classList.add('active');
+            else if (groupName === 'Group C') document.getElementById('btnGroupC').classList.add('active');
+            else if (groupName === 'Non Shift') document.getElementById('btnNonShift').classList.add('active');
+            else if (groupName === 'Dept Lain') document.getElementById('btnDeptLain').classList.add('active');
+        }
+
+        function updateFormLayout() {
+            const groupWrapper = document.getElementById('groupManpowerWrapper');
+            const rfidWrapper = document.getElementById('rfidWrapper');
+            const spiderWrapper = document.getElementById('spiderWrapper');
+            const labelTablet = document.getElementById('labelTablet');
+            const tabletInput = document.getElementById('tabletVal');
+
+            if (selectedStatus === 'PINJAM') {
+                groupWrapper.style.display = 'block';
+                rfidWrapper.style.display = 'block';
+                spiderWrapper.style.display = 'block';
+                labelTablet.innerHTML = 'No. Tablet / PDA <span class="text-danger">*</span>';
+                tabletInput.required = true;
+            } else {
+                // Saat KEMBALI, tampilkan semua kolom agar semua asset yang dipinjam (Tablet, RFID, Spider) muncul utuh
+                groupWrapper.style.display = 'none';
+                rfidWrapper.style.display = 'block';
+                spiderWrapper.style.display = 'block';
+                labelTablet.innerHTML = 'No. Tablet / PDA yang Dikembalikan';
+                tabletInput.required = false;
+            }
+        }
+
+        async function submitTransaction(event) {
+            event.preventDefault();
+            if (selectedStatus === 'PINJAM' && !selectedGroup) {
+                alert("Silakan pilih Group terlebih dahulu!");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const alertBox = document.getElementById('formAlert');
+            btn.disabled = true;
+            btn.innerText = "Mengirim...";
+            alertBox.classList.add('d-none');
+
+            const payload = {
+                nik: currentNik,
+                nama: currentNama,
+                status: selectedStatus,
+                manpowerGroup: selectedStatus === 'PINJAM' ? selectedGroup : "-",
+                tablet: document.getElementById('tabletVal').value.trim(),
+                rfid: document.getElementById('rfidVal').value.trim(),
+                spider: document.getElementById('spiderVal').value.trim()
+            };
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                alertBox.className = "alert alert-success py-2 small text-center mb-3";
+                alertBox.innerText = "Data berhasil diinput ke system!";
+                alertBox.classList.remove('d-none');
+
+                if (selectedStatus === 'KEMBALI') {
+                    setTimeout(() => {
+                        backToLogin(); 
+                    }, 1200);
+                } else {
+                    document.getElementById('tabletVal').value = "";
+                    document.getElementById('rfidVal').value = "";
+                    document.getElementById('spiderVal').value = "";
+                }
+            } catch (err) {
+                console.error(err);
+                alertBox.className = "alert alert-danger py-2 small text-center mb-3";
+                alertBox.innerText = "Gagal mengirim data.";
+                alertBox.classList.remove('d-none');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "SUBMIT";
+            }
+        }
+    </script>
+</body>
+</html>
